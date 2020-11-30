@@ -9,6 +9,7 @@
           "__dirname"
         ]
       }
-    ]
+    ],
+    "arrow-body-style": ["error", "always"]
   }
 }
