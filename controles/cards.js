@@ -1,10 +1,7 @@
-const path = require('path');
-const getDataInfo = require('../helpers/helpers');
-
-const dataCardsPath = path.join(__dirname, '../data/cards.json');
+const Card = require('../models/card');
 
 const getCards = (req, res) => {
-  return getDataInfo(dataCardsPath)
+  Card.find({})
     .then((cards) => {
       res.status(200).send(cards);
     })
