@@ -1,19 +1,13 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const cardSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     minlength: 2,
     maxlength: 30,
   },
-  about: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
-  },
-  avatar: {
+  link: {
     type: String,
     required: true,
     validate: {
@@ -25,8 +19,21 @@ const userSchema = new mongoose.Schema({
       message: 'Некоррекные данные',
     },
   },
+  owner: {
+    type: mongoose.ObjectId,
+    required: true,
+  },
+  likes: {
+    type: Array.ObjectId,
+    default: [],
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-const userModel = mongoose.model('user', userSchema);
+const cardModel = mongoose.model('user', cardSchema);
 
-module.exports = userModel;
+module.exports = cardModel;
