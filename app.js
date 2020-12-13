@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const app = express();
-const path = require('path');
 
 const PORT = 3000;
 
@@ -19,8 +18,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
 const errorRouter = require('./routes/errorUrl');
-
-app.use(express.static(path.join(__dirname, 'public')));
 
 // временное решение авторизации
 app.use((req, res, next) => {

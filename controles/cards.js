@@ -9,7 +9,7 @@ const getCards = (req, res) => {
 };
 
 const getCard = (req, res) => {
-  Card.findOne({ _id: req.params })
+  Card.findById(req.params._id)
     .then((card) => {
       if (!card) {
         return res.status(404).send(JSON.parse({ message: 'Нет пользователя с таким id' }));
