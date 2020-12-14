@@ -17,7 +17,7 @@ const getCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(404).send({ message: 'Нет пользователя с таким id' });
+        res.status(404).send({ message: 'Данная карточка отсутствует' });
       } else {
         res.status(500).send({ message: 'Упс! У нас ошибка, разберемся!' });
       }
@@ -42,7 +42,39 @@ const deleteCard = (req, res) => {
     .then((card) => { res.send({ data: card }); })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(404).send({ message: 'Нет пользователя с таким id' });
+        res.status(404).send({ message: 'Данная карточка отсутствует' });
+      } else {
+        res.status(500).send({ message: 'Упс! У нас ошибка, разберемся!' });
+      }
+    });
+};
+
+const likeCard = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true },
+  )
+    .then((card) => { res.send({ data: card }); })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(404).send({ message: 'Данная карточка отсутствует' });
+      } else {
+        res.status(500).send({ message: 'Упс! У нас ошибка, разберемся!' });
+      }
+    });
+};
+
+const dislikeCard = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } },
+    { new: true },
+  )
+    .then((card) => { res.send({ data: card }); })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(404).send({ message: 'Данная карточка отсутствует' });
       } else {
         res.status(500).send({ message: 'Упс! У нас ошибка, разберемся!' });
       }
@@ -50,5 +82,5 @@ const deleteCard = (req, res) => {
 };
 
 module.exports = {
-  getCards, getCard, createCard, deleteCard,
+  getCards, getCard, createCard, deleteCard, likeCard, dislikeCard,
 };
