@@ -5,31 +5,48 @@ const getCards = (req, res) => {
     .then((cards) => {
       res.status(200).send(cards);
     })
-    .catch((err) => { res.status(500).send(err); });
+    .catch(() => {
+      res.status(500).send({ message: 'На сервере произошла ошибка' });
+    });
 };
 
 const getCard = (req, res) => {
   Card.findById(req.params._id)
     .then((card) => {
-      if (!card) {
-        return res.status(404).send(JSON.parse({ message: 'Нет пользователя с таким id' }));
-      }
       return res.status(200).send({ card });
     })
-    .catch(() => { res.status(400).send({ message: 'Что-то пошло не так' }); });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(404).send({ message: 'Нет пользователя с таким id' });
+      } else {
+        res.status(500).send({ message: 'Упс! У нас ошибка, разберемся!' });
+      }
+    });
 };
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => { res.send({ body: card }); })
-    .catch(() => { res.status(500).send({ message: 'Произошла ошибка' }); });
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Некорректно введенные данные' });
+      } else {
+        res.status(500).send({ message: 'Упс! У нас ошибка, разберемся!' });
+      }
+    });
 };
 
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params._id)
     .then((card) => { res.send({ data: card }); })
-    .catch(() => { res.status(500).send({ message: 'Произошла ошибка' }); });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(404).send({ message: 'Нет пользователя с таким id' });
+      } else {
+        res.status(500).send({ message: 'Упс! У нас ошибка, разберемся!' });
+      }
+    });
 };
 
 module.exports = {
